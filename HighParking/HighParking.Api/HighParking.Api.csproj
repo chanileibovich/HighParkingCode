@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HighParking.Core\HighParking.Core.csproj" />
+    <ProjectReference Include="..\HighParking.Data\HighParking.Data.csproj" />
+    <ProjectReference Include="..\HighParking.Service\HighParking.Service.csproj" />
+  </ItemGroup>
+
+</Project>
