@@ -1,13 +1,20 @@
 ﻿ using HighParking.Core.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+
+
 
 namespace HighParking.Core.Repositories
 {
     public interface ICustomerRepository
     {
-        List<Customers> GetAllCustomers();
+        IEnumerable<Customer> GetAllCustomer();
 
         int GetCountCustomer();
 
-        Customers GetCustomerById(string id);
+        Customer GetCustomerById(int id);
+        Customer AddCustomer(Customer Cust);
+        Customer UpdateCustomer(int id, Customer cs);
+        Customer DeleteCustomer(int id);
     }
 }

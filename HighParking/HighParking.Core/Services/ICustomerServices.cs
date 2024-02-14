@@ -2,11 +2,17 @@
 
 namespace HighParking.Core.Services
 {
-    public interface ICustomerServices
+    public interface ICustomerervices
     {
 
-        IEnumerable<Customers> GetAllCustomers();
-        Customers GetCustomerById(string id);
+        IEnumerable<Customer> GetAllCustomer();
+
+        int GetCountCustomer();
+
+        Customer GetCustomerById(int id);
+        Customer AddCustomer(Customer Cust);
+        Customer UpdateCustomer(int id, Customer cs);
+        Customer DeleteCustomer(int id);
 
     }
 }

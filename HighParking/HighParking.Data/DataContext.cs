@@ -1,22 +1,21 @@
 ﻿using HighParking.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace HighParking.Data
 {
-    public class DataContext
+    public class DataContext: DbContext
     {
-        public List<Customers> custommerList { get; set; }
+        public DbSet<Customer> custommerList { get; set; }
+        public DbSet<ParkingDetails> DetailsList { get; set; }
         
-        public List<Invoicing> invoicinglist { get; set; }
-       
-
-        public DataContext()
+        public DbSet<Invoicing> invoicinglist { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            custommerList = new List<Customers>();
-            custommerList.Add(new Customers { Id = "000000018", Name = "default name", Email = "default@gmail.com", Phone = "0500000000", Code = 1, Credit = "4580123412341234", Status = Status.regular, Points = 0 });
-            
-            invoicinglist = new List<Invoicing>();
-            invoicinglist.Add(new Invoicing { NumInvoicing = 1, Id = "000000018", Status = Status.regular, Enter = DateTime.Now, Exit = new DateTime(2023, 08, 11, 9, 0, 0), DwellTime = DateTime.Now, Date_ = DateTime.Now, Kindofpayment = Status.regular, total = 1504.25 });
-            
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=chaniDB");
+        }
+
+
+
     }
-}
+    
 }

@@ -15,9 +15,8 @@ namespace HighParking.Service
 
         public Invoicing GetInvoicingById(string id)
         {
-            
-            return _invoicingRepository.GetAllInvoicings().First(u => u.Id==id);
 
+            return _invoicingRepository.GetInvoicingById(id);
         }
 
       
@@ -27,6 +26,20 @@ namespace HighParking.Service
             return _invoicingRepository.GetAllInvoicings();
         }
 
-        
+        public Invoicing UpdateInvoicing(Invoicing Inv, string id)
+        {
+            return _invoicingRepository.UpdateInvoicing(Inv, id);
+        }
+
+        public Invoicing AddInvoicing(Invoicing inv)
+        {
+            return _invoicingRepository.AddInvoicing(inv);
+        }
+
+        public int GetCountInvoicing()
+        {
+            return _invoicingRepository.GetCountInvoicing();
+        }
+
     }
 }

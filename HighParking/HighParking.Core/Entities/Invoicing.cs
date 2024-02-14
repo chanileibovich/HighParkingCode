@@ -2,20 +2,12 @@
     public class Invoicing
     {
 
-        public enum KindOfPayment
-        {
-            Married, Single,
-        }
-
-        public int NumInvoicing { get; set; }
-        public string Id { get; set; }
-        public Status Status { get; set; }
-        public DateTime Enter { get; set; }
-        public DateTime Exit { get; set; }
-        public DateTime DwellTime { get; set; }
-        public DateTime Date_ { get; set; }
-        public Status Kindofpayment { get; set; }
-        public double total { get; set; }
+        public int Id { get; set; }
+        public Status CustomerType { get; set; }  
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
+        public int ParkingDetailsId { get; set; }
+        public ParkingDetails ParkingDetails { get; set; }
 
 
 

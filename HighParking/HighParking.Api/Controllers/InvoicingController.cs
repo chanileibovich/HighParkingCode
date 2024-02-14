@@ -1,4 +1,5 @@
-﻿using HighParking.Core.Entities;
+﻿using HighParking.Api.Controllers.Models;
+using HighParking.Core.Entities;
 using HighParking.Data;
 using HighParking.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@ namespace HighParking.Api.Controllers
     public class InvoicingController : ControllerBase
     {
         private readonly InvoicingService _invoicingservice;
-        private static List<Invoicing> lstinvoicing = new List<Invoicing>();
 
 
         public InvoicingController(InvoicingService invoicingservice)
@@ -31,52 +31,29 @@ namespace HighParking.Api.Controllers
 
         // GET Api/<InvoicingController>/5
         [HttpGet("{id}")]
-        public ActionResult<Invoicing> Get(string id)
+        public ActionResult<Invoicing> GetById(string id)
         {
-            var inv = _invoicingservice.GetInvoicingById(id);
-            if (inv == null)
-            {
-                return NotFound();
-            }
-            return inv;
+            return Ok(_invoicingservice.GetInvoicingById(id));
         }
 
         // POST Api/<InvoicingController>
         [HttpPost]
-        public ActionResult Post([FromBody] Invoicing inv)
+        public Invoicing Post([FromBody] InvoicingPostModel inv)
         {
-            lstinvoicing.Add(new Invoicing { Date_=inv.Date_, DwellTime=inv.DwellTime, Enter=inv.Enter, Exit= inv.Exit, Id= inv.Id, Kindofpayment= inv.Kindofpayment, NumInvoicing= inv.NumInvoicing, Status= inv.Status, total= inv.total});           
-            return Ok();
-            
-        }
+            var invoicing = new Invoicing { CustomerType = inv.CustomerType, CustomerId=inv.CustomerId, ParkingDetailsId=inv.ParkingDetailsId };
+            return _invoicingservice.AddInvoicing(invoicing);
+
+
+    }
 
         // PUT Api/<InvoicingController>/5
         [HttpPut("{id}")]
-        public void Put(string id, [FromBody] Invoicing inv)
+        public Invoicing Put(string id, [FromBody] Invoicing inv)
         {
-            Invoicing i = _invoicingservice.GetInvoicingById(id);
-            if (i != null)
-            {
-                i.Status = inv.Status;
-                i.Enter = inv.Enter;
-                i.Exit = inv.Exit;
-                i.DwellTime = inv.DwellTime;
-                i.Date_ = inv.Date_;
-                i.Kindofpayment = inv.Kindofpayment;
-                i.total = inv.total;
-
-            }
+           return _invoicingservice.UpdateInvoicing(inv, id);
         }
 
-        // DELETE Api/<InvoicingController>/5
-        [HttpDelete("{id}")]
-        public void Delete(string id)
-        {
-            Invoicing i = _invoicingservice.GetInvoicingById(id);
-            if (i != null)
-            {
-                lstinvoicing.Remove(i);
-            }
-        }
+
+
     }
 }

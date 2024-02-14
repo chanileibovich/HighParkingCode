@@ -1,4 +1,8 @@
-﻿using HighParking.Core.Entities;
+﻿using AutoMapper;
+using HighParking.Api.Controllers.Models;
+using HighParking.Core;
+using HighParking.Core.DTOs;
+using HighParking.Core.Entities;
 using HighParking.Core.Services;
 using HighParking.Data;
 using HighParking.Service;
@@ -14,73 +18,63 @@ namespace HighParking.Api.Controllers
     [ApiController]
     public class CustommerController : ControllerBase
     {
-        private readonly ICustomerServices _icustomersservice;
-        private static List<Customers> lstcustomers = new List<Customers>();
+        private readonly ICustomerervices _iCustomerservice;
+        private readonly Mapping _mapping;
+        private readonly IMapper _mapper;
 
-
-        public CustommerController(ICustomerServices customersservice)
+        public CustommerController(ICustomerervices Customerservice, Mapping mapping, IMapper mapper)
         {
-            _icustomersservice = customersservice;
+            _iCustomerservice = Customerservice;
+            _mapping = mapping;
+            _mapper = mapper;
         }
         // GET: Api/<CustommerController>
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult GetAll()
         {
-            return Ok(_icustomersservice.GetAllCustomers());
+            return Ok(_iCustomerservice.GetAllCustomer());
         }
 
         // GET Api/<CustommerController>/5
         [HttpGet("{id}")]
-        public ActionResult <Customers> Get(string id)
+        public Customer GetById(int id)
         {
-            var c = _icustomersservice.GetCustomerById(id);
-            if(c==null)
-            {
-                return NotFound();
-            }
-            return c;
+            return _iCustomerservice.GetCustomerById(id);
+            
         }
 
         // POST Api/<CustommerController>
         [HttpPost]
-        public ActionResult Post([FromBody] Customers cs)
+        public ActionResult Post([FromBody] CustomerPostModel cs)
         {
-            if (cs.Id.ToString().Length != 9)
-            {
-                return BadRequest();
-            }
-            lstcustomers.Add(new Customers { Id = cs.Id, Name = cs.Name, Phone = cs.Phone, Bit=cs.Bit, Code=cs.Code, Email=cs.Email, Credit=cs.Credit, Points=cs.Points, Status=cs.Status});
-            return Ok();
-        }
+            var cust = new Customer { StrId = cs.StrId, Name=cs.Name, Email=cs.Email, Phone=cs.Phone, Code=(int)cs.Code, Credit=cs.Credit, Status=cs.Status, Points=cs.Points };
+            var custtoadd = _iCustomerservice.AddCustomer(cust);
+            var customerdto = _mapper.Map<CustomerDto>(custtoadd);
+            return Ok(customerdto);
+
+
+    }
 
         // PUT Api/<CustommerController>/5
         [HttpPut("{id}")]
-        public void Put(string id, [FromBody] Customers cs)
+        public ActionResult Put(int id, [FromBody] Customer cs)
         {
-            Customers c = _icustomersservice.GetCustomerById(id);
-            if (c != null)
+            var cust = _iCustomerservice.GetCustomerById(id);
+            if (cust is null)
             {
-                c.Name = cs.Name;
-                c.Email = cs.Email;
-                c.Phone = cs.Phone;
-                c.Code = cs.Code;
-                c.Credit = cs.Credit;
-                c.Status = cs.Status;
-                c.Points = cs.Points;
+                return NotFound();
             }
-
+            _mapper.Map(cs, cust);
+            return Ok(_iCustomerservice.UpdateCustomer(id, cust));
         }
 
         // DELETE Api/<CustommerController>/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public Customer Delete(int id)
         {
-            Customers c = _icustomersservice.GetCustomerById(id);
-            if (c != null)
-            {
-                lstcustomers.Remove(c);
-                
-            }
+           return _iCustomerservice.DeleteCustomer(id);
         }
+
+
     }
 }
